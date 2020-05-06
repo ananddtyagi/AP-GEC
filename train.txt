@@ -1,8 +1,0 @@
-S This are an sentence .
-A 2 3|||RD:DET|||a
-
-S This are a sentence .
-A 1 2|||R:VERB:SVA|||is
-
-S This is a sentence .
-A 3 3|||M:ADJ|||good
