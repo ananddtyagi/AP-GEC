@@ -1,8 +1,8 @@
 
 #import functions from independent files to keep each process separate
-from phase1 import phase1
+# from phase1 import phase1 #ignore for baseline
 from phase2 import phase2
-from phase3 import phase3
+from phase3 import phase3 #takes one array [input file path, output file path]
 ############################
 
 
@@ -21,8 +21,6 @@ for line in train_file:
         break;
     if line[0] == 'S':
         sentence = line
-
     if line[0] == 'A':
         corrections.append(line)
 
-        

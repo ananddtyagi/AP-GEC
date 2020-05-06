@@ -1,3 +1,5 @@
+
+#This code was written by Anand Tyagi
 import torch
 from transformers import BertTokenizer, BertModel, BertForMaskedLM
 import sys
@@ -6,12 +8,8 @@ import sys
 # setup toolbar
 #ELECTRA
 # from transformers import ElectraModel, ElectraTokenizer, ElectraForMaskedLM, ElectraForTokenClassification
-
 # #ALBERT
 # from transformers import AlbertTokenizer, AlbertModel, AlbertForMaskedLM
-
-
-
 # OPTIONAL: if you want to have more information on what's happening under the hood, activate the logger as follows
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -20,10 +18,11 @@ logging.basicConfig(level=logging.INFO)
 
 def bert_format(sentence, masked_index):
     return ['[CLS]'] + sentence + ['[SEP]'], masked_index + 1
-
 # tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 # tokenizer = ElectraTokenizer.from_pretrained('google/electra-small-discriminator')
-tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
+# tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+# tokenizer = ElectraTokenizer.from_pretrained('google/electra-small-discriminator')
 
 train_file = open('./Pre-Processing/output.txt')
 
@@ -42,8 +41,10 @@ tokens_tensor = None
 segments_tensors = None
 
 # Load pre-trained model (weights)
-model = AlbertForMaskedLM.from_pretrained('albert-base-v2')
+# model = AlbertForMaskedLM.from_pretrained('albert-base-v2')
 # model = ElectraForMaskedLM.from_pretrained('google/electra-small-discriminator')
+model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+# model = ElectraForMaskedLM.from_pretrained('google/electra-smaqll-discriminator')
 
 model.eval()
 model.to('cuda')
