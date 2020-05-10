@@ -1,0 +1,3 @@
+[submodule "models/BERT/m2-correct"]
+	path = models/BERT/m2-correct
+	url = https://github.com/samueljamesbell/m2-correct
