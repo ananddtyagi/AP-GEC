@@ -2,6 +2,7 @@ from transformers import pipeline
 import torch
 from transformers import ElectraModel, ElectraTokenizer
 import string
+from operator import itemgetter
 
 def fstr(sentence):
     return eval(f"f'{sentence}'")
@@ -16,33 +17,26 @@ fill_mask = pipeline(
     tokenizer="google/electra-base-generator"
 )
 
-# print(
-#     fill_mask(f"HuggingFace is creating a [MASK] that the community uses to solve NLP tasks.")
-# )
+
 tokenizer = ElectraTokenizer.from_pretrained('google/electra-base-generator')
 
+def predict(sentence, threshold):
+    tokenized_sentence = tokenizer.tokenize(sentence)
+    best_predictions = []
+    for i, word in enumerate(tokenized_sentence):
+        if tokenized_sentence[i] in string.punctuation: #avoid calculating punctuation which will likely have the highest result
+            continue;
 
-data = {'sentence': 'HuggingFace is creating an tool that the community uses to solve NLP tasks.', 'correction': '', 'index': []}
-tokenized_sentence = tokenizer.tokenize(data['sentence'])
-# replacements = {'index': 0, 'token': 0, 'confidence': 0} #index, token, confidence
-replacements = []
+        masked_sentence = ' '.join(mask(tokenized_sentence, i)).replace(' ##', '')
+        prediction = fill_mask(masked_sentence)[0]
+        # print(masked_sentence)
+        # print(prediction)
+        predicted_token = tokenizer.convert_ids_to_tokens(prediction['token'])
+        if predicted_token != word:
+            if prediction['score'] > threshold:
+                best_predictions.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
 
-for i, word in enumerate(tokenized_sentence):
-
-    if tokenized_sentence[i] in string.punctuation: #avoid calculating punctuation which will likely have the highest result
-        continue;
-
-    masked_sentence = ' '.join(mask(tokenized_sentence, i)).replace(' ##', '')
-    prediction = fill_mask(masked_sentence)[0]
-    print(prediction)
-    print(word)
-    if tokenizer.convert_ids_to_tokens(prediction['token']) != word:
-        if prediction['score'] > 0.80:
-            replacements.append({'index': i, 'token': prediction['token'], 'confidence': prediction['score']})
+    sorted_best_predictions = sorted(best_predictions, key=itemgetter('confidence'), reverse=True)
 
 
-for token in replacements:
-    tokenized_sentence[token['index']] = tokenizer.convert_ids_to_tokens(token['token'])
-correct_sentence = ' '.join(tokenized_sentence)
-correct_sentence = correct_sentence.replace(' ##', '')
-print(correct_sentence)
+    return sorted_best_predictions

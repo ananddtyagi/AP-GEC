@@ -1,13 +1,18 @@
 from bert1 import predict as BERT1
-# from bert2 import predict as BERT2
+from bert2 import predict as BERT2
 from electra1 import predict as ELECTRA1
-# from electra2 import predict as ELECTRA2
+from electra2 import predict as ELECTRA2
 
 from tqdm import trange
 topk = 1
 bert1_correct = 0
+bert2_correct = 0
+
 electra1_correct = 0
+electra2_correct = 0
+
 total = 0
+threshold = 0.8
 
 with open('./input_data/input.txt', 'r') as preprocessed_file:
     lines = preprocessed_file.readlines()
@@ -43,25 +48,54 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             electra1_correct += 1
 
+        bert2_suggestions = [sug['token'] for sug in BERT2(input_sentence, threshold)]
+        if correction[2] in bert2_suggestions:
+            #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
+            bert2_correct += 1
+
+        electra2_suggestions = [sug['token'] for sug in ELECTRA2(input_sentence, threshold)]
+        if correction[2] in electra2_suggestions:
+            #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
+            electra2_correct += 1
+
         if total % 10 == 0:
             print('BERT1 results:')
             print("\t Correct: ", bert1_correct)
             print("\t Total Evaluated: ", total)
             print("\t Accuracy: ", bert1_correct/total)
 
+            print('BERT2 results:')
+            print("\t Correct: ", bert2_correct)
+            print("\t Total Evaluated: ", total)
+            print("\t Accuracy: ", bert2_correct/total)
+
             print('ELECTRA1 results:')
             print("\t Correct: ", electra1_correct)
             print("\t Total Evaluated: ", total)
             print("\t Accuracy: ", electra1_correct/total)
+
+            print('ELECTRA2 results:')
+            print("\t Correct: ", electra2_correct)
+            print("\t Total Evaluated: ", total)
+            print("\t Accuracy: ", electra2_correct/total)
 
     print('BERT1 results:')
     print("\t Correct: ", bert1_correct)
     print("\t Total Evaluated: ", total)
     print("\t Accuracy: ", bert1_correct/total)
 
+    print('BERT2 results:')
+    print("\t Correct: ", bert2_correct)
+    print("\t Total Evaluated: ", total)
+    print("\t Accuracy: ", bert2_correct/total)
+
     print('ELECTRA1 results:')
     print("\t Correct: ", electra1_correct)
     print("\t Total Evaluated: ", total)
     print("\t Accuracy: ", electra1_correct/total)
 
+    print('ELECTRA2 results:')
+    print("\t Correct: ", electra2_correct)
+    print("\t Total Evaluated: ", total)
+    print("\t Accuracy: ", electra2_correct/total)
 
