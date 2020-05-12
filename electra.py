@@ -1,6 +1,6 @@
 from transformers import pipeline
 import torch
-from transformers import ElectraModel, ElectraTokenizer
+from transformers import ElectraModel, ElectraTokenizer, ElectraForPreTraining
 import string
 from operator import itemgetter
 
@@ -13,12 +13,14 @@ def mask(sentence, masked_index):
 
 fill_mask = pipeline(
     "fill-mask",
-    model="google/electra-base-generator",
-    tokenizer="google/electra-base-generator"
+    model="google/electra-large-generator",
+    tokenizer="google/electra-large-generator"
 )
 
 
-tokenizer = ElectraTokenizer.from_pretrained('google/electra-base-generator')
+tokenizer = ElectraTokenizer.from_pretrained('google/electra-large-generator')
+discriminator = ElectraForPreTraining.from_pretrained("google/electra-base-discriminator")
+
 
 def predict(sentence, topk, threshold):
     tokenized_sentence = tokenizer.tokenize(sentence)
@@ -37,6 +39,9 @@ def predict(sentence, topk, threshold):
             electra1.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
             if prediction['score'] > threshold:
                 electra2.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
+            # discriminator_outputs = discriminator(fake_inputs)
+            # predictions = torch.round((torch.sign(discriminator_outputs[0]) + 1) / 2)
+
     sorted_electra1 = sorted(electra1, key=itemgetter('confidence'), reverse=True)
     sorted_electra2 = sorted(electra2, key=itemgetter('confidence'), reverse=True)
 

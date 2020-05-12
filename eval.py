@@ -4,15 +4,18 @@
 # from electra2 import predict as ELECTRA2
 from bert import predict as BERT
 from electra import predict as ELECTRA
-
+from combined import predict as COMBINED
 
 from tqdm import trange
-topk = 1
+topk = 5
 bert1_correct = 0
 bert2_correct = 0
 
 electra1_correct = 0
 electra2_correct = 0
+
+combined1_correct = 0
+combined2_correct = 0
 
 total = 0
 threshold = 0.8
@@ -59,44 +62,64 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             electra2_correct += 1
 
+        # combined1_suggestions, combined2_suggestions = COMBINED(input_sentence, topk, threshold)
+        combined1_suggestions = COMBINED(input_sentence, topk, threshold)
+        if correction[2] in combined1_suggestions:
+            combined1_correct += 1
+        #
+        # if correction[2] in combined2_suggestions:
+        #     combined2_correct += 1
+
         if total % 10 == 0:
+            print("\nTotal Evaluated: ", total)
+
             print('BERT1 results:')
             print("\t Correct: ", bert1_correct)
-            print("\t Total Evaluated: ", total)
             print("\t Accuracy: ", bert1_correct/total)
 
             print('BERT2 results:')
             print("\t Correct: ", bert2_correct)
-            print("\t Total Evaluated: ", total)
             print("\t Accuracy: ", bert2_correct/total)
 
             print('ELECTRA1 results:')
             print("\t Correct: ", electra1_correct)
-            print("\t Total Evaluated: ", total)
             print("\t Accuracy: ", electra1_correct/total)
 
             print('ELECTRA2 results:')
             print("\t Correct: ", electra2_correct)
-            print("\t Total Evaluated: ", total)
             print("\t Accuracy: ", electra2_correct/total)
+
+            print('Combined1 results:')
+            print("\t Correct: ", combined1_correct)
+            print("\t Accuracy: ", combined1_correct/total)
+
+            # print('Combined2 results:')
+            # print("\t Correct: ", combined2_correct)
+            # print("\t Accuracy: ", combined2_correct/total)
+
+
+    print("\nTotal Evaluated: ", total)
 
     print('BERT1 results:')
     print("\t Correct: ", bert1_correct)
-    print("\t Total Evaluated: ", total)
     print("\t Accuracy: ", bert1_correct/total)
 
     print('BERT2 results:')
     print("\t Correct: ", bert2_correct)
-    print("\t Total Evaluated: ", total)
     print("\t Accuracy: ", bert2_correct/total)
 
     print('ELECTRA1 results:')
     print("\t Correct: ", electra1_correct)
-    print("\t Total Evaluated: ", total)
     print("\t Accuracy: ", electra1_correct/total)
 
     print('ELECTRA2 results:')
     print("\t Correct: ", electra2_correct)
-    print("\t Total Evaluated: ", total)
     print("\t Accuracy: ", electra2_correct/total)
 
+    print('Combined1 results:')
+    print("\t Correct: ", combined1_correct)
+    print("\t Accuracy: ", combined1_correct/total)
+
+    # print('Combined2 results:')
+    # print("\t Correct: ", combined2_correct)
+    # print("\t Accuracy: ", combined2_correct/total)
