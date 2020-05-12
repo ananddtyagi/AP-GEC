@@ -40,4 +40,5 @@ def predict(sentence, topk, threshold):
     sorted_electra1 = sorted(electra1, key=itemgetter('confidence'), reverse=True)
     sorted_electra2 = sorted(electra2, key=itemgetter('confidence'), reverse=True)
 
-    return sorted_electra1[:topk], sorted_electra2
+    return [sug['token'] for sug in sorted_electra1[:topk]], [sug['token'] for sug in sorted_electra2]
+

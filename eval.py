@@ -41,7 +41,7 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
 
         total += 1 #we will evalute this error
 
-        bert1_suggestions, bert2_suggestions = [sug['token'] for sug in BERT(input_sentence, topk, threshold)]
+        bert1_suggestions, bert2_suggestions = BERT(input_sentence, topk, threshold)
         if correction[2] in bert1_suggestions:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             bert1_correct += 1
@@ -50,7 +50,7 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             bert2_correct += 1
 
-        electra1_suggestions, electra2_suggestions = [sug['token'] for sug in ELECTRA(input_sentence, topk, threshold)]
+        electra1_suggestions, electra2_suggestions = ELECTRA(input_sentence, topk, threshold)
         if correction[2] in electra1_suggestions:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             electra1_correct += 1

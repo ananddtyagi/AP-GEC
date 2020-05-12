@@ -40,4 +40,4 @@ def predict(sentence, topk, threshold):
     sorted_bert1 = sorted(bert1, key=itemgetter('confidence'), reverse=True)
     sorted_bert2 = sorted(bert2, key=itemgetter('confidence'), reverse=True)
 
-    return sorted_bert1[:topk], sorted_bert2
+    return [sug['token'] for sug in sorted_bert1[:topk]], [sug['token'] for sug in sorted_bert2]
