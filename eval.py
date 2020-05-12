@@ -1,7 +1,10 @@
-from bert1 import predict as BERT1
-from bert2 import predict as BERT2
-from electra1 import predict as ELECTRA1
-from electra2 import predict as ELECTRA2
+# from bert1 import predict as BERT1
+# from bert2 import predict as BERT2
+# from electra1 import predict as ELECTRA1
+# from electra2 import predict as ELECTRA2
+from bert import predict as BERT
+from electra import predict as ELECTRA
+
 
 from tqdm import trange
 topk = 1
@@ -38,22 +41,20 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
 
         total += 1 #we will evalute this error
 
-        bert1_suggestions = [sug['token'] for sug in BERT1(input_sentence, topk)]
+        bert1_suggestions, bert2_suggestions = [sug['token'] for sug in BERT(input_sentence, topk, threshold)]
         if correction[2] in bert1_suggestions:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             bert1_correct += 1
 
-        electra1_suggestions = [sug['token'] for sug in ELECTRA1(input_sentence, topk)]
-        if correction[2] in electra1_suggestions:
-            #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
-            electra1_correct += 1
-
-        bert2_suggestions = [sug['token'] for sug in BERT2(input_sentence, threshold)]
         if correction[2] in bert2_suggestions:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             bert2_correct += 1
 
-        electra2_suggestions = [sug['token'] for sug in ELECTRA2(input_sentence, threshold)]
+        electra1_suggestions, electra2_suggestions = [sug['token'] for sug in ELECTRA(input_sentence, topk, threshold)]
+        if correction[2] in electra1_suggestions:
+            #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
+            electra1_correct += 1
+
         if correction[2] in electra2_suggestions:
             #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
             electra2_correct += 1
