@@ -22893,4 +22893,3 @@ A 21 22|||U:PUNCT||||||REQUIRED|||-NONE-|||0
 
 S The cause for television violence is to add texture to the show and not to poison children 's minds .
 A 1 2|||R:NOUN|||reason|||REQUIRED|||-NONE-|||0
-
