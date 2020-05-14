@@ -17,7 +17,7 @@ combined_both = 0
 total = 0
 threshold = 0.8
 
-with open('./input_data/input.txt', 'r') as preprocessed_file:
+with open('./input_data/test.txt', 'r') as preprocessed_file:
     lines = preprocessed_file.readlines()
     i = 0
     while i < len(lines):
