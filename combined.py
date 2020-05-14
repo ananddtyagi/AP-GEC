@@ -20,6 +20,13 @@ fill_mask = pipeline(
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 discriminator = ElectraForPreTraining.from_pretrained("google/electra-base-discriminator")
 
+def are_syns(word1, word2):
+    for synset in wordnet.synsets(word1):
+        for lemma in synset.lemma_names():
+            if lemma == word2 and lemma != word1:
+                return True
+    return False
+
 def discriminator_predict(input_sent, topk):
     fake_sentence = tokenizer.tokenize(input_sent)
     fake_inputs = tokenizer.encode(fake_sentence, return_tensors="pt")
@@ -45,7 +52,7 @@ def predict(sentence, topk, threshold):
 
         prediction = fill_mask(masked_sentence)[0]
         predicted_token = tokenizer.convert_ids_to_tokens(prediction['token'])
-        if predicted_token != tokenized_sentence[i]:
+        if predicted_token != tokenized_sentence[i] and not are_syns(predicted_token, word):
             combined1.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
             # if prediction['score'] > threshold:
             #     combined2.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})

@@ -3,6 +3,8 @@ import torch
 from transformers import BertModel, BertTokenizer
 import string
 from operator import itemgetter
+from nltk.corpus import wordnet
+
 
 def fstr(sentence):
     return eval(f"f'{sentence}'")
@@ -20,10 +22,18 @@ fill_mask = pipeline(
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
+def are_syns(word1, word2):
+    for synset in wordnet.synsets(word1):
+        for lemma in synset.lemma_names():
+            if lemma == word2 and lemma != word1:
+                return True
+    return False
+
 def predict(sentence, topk, threshold):
     tokenized_sentence = tokenizer.tokenize(sentence)
-    bert1 = []
-    bert2 = []
+    bert = []
+
+
     for i, word in enumerate(tokenized_sentence):
         if tokenized_sentence[i] in string.punctuation: #avoid calculating punctuation which will likely have the highest result
             continue;
@@ -33,11 +43,10 @@ def predict(sentence, topk, threshold):
         # print(masked_sentence)
         # print(prediction)
         predicted_token = tokenizer.convert_ids_to_tokens(prediction['token'])
-        if predicted_token != word:
-            bert1.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
+        if predicted_token != word and not are_syns(predicted_token, word):
             if prediction['score'] > threshold:
-                bert2.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
-    sorted_bert1 = sorted(bert1, key=itemgetter('confidence'), reverse=True)
-    sorted_bert2 = sorted(bert2, key=itemgetter('confidence'), reverse=True)
+                bert.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
 
-    return [sug['token'] for sug in sorted_bert1[:topk]], [sug['token'] for sug in sorted_bert2]
+    sorted_bert = sorted(bert, key=itemgetter('confidence'), reverse=True)
+
+    return [sug['token'] for sug in sorted_bert]
