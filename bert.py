@@ -29,7 +29,7 @@ def are_syns(word1, word2):
                 return True
     return False
 
-def predict(sentence, topk, threshold):
+def predict(sentence, threshold):
     tokenized_sentence = tokenizer.tokenize(sentence)
     bert = []
 

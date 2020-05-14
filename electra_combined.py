@@ -13,11 +13,12 @@ def mask(sentence, masked_index):
 
 fill_mask = pipeline(
     "fill-mask",
-    model="bert-base-uncased",
-    tokenizer="bert-base-uncased"
+    model="google/electra-base-generator",
+    tokenizer="google/electra-base-generator"
+
 )
 
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+tokenizer = ElectraTokenizer.from_pretrained('google/electra-base-generator')
 discriminator = ElectraForPreTraining.from_pretrained("google/electra-base-discriminator")
 
 def are_syns(word1, word2):
@@ -40,7 +41,7 @@ def discriminator_predict(input_sent, topk):
         top_k_indices.append(sorted_outputs_indices[-i-1]-1)
     return(top_k_indices)
 
-def predict(sentence, topk, threshold):
+def predict(sentence, threshold):
     tokenized_sentence = tokenizer.tokenize(sentence)
     combined1 = []
     # combined2 = []

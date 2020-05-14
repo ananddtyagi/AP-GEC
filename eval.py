@@ -3,19 +3,16 @@
 # from electra1 import predict as ELECTRA1
 # from electra2 import predict as ELECTRA2
 from bert import predict as BERT
-from electra import predict as ELECTRA
-from combined import predict as COMBINED
+from electra_base import predict as ELECTRA_BASE
+from combined_electra import predict as COMBINED_ELECTRA
+from combined_both import predict as COMBINED_BOTH
 
 from tqdm import trange
-topk = 5
-bert_correct = 0
 
-#
-# electra1_correct = 0
-# electra2_correct = 0
-#
-combined1_correct = 0
-# combined2_correct = 0
+bert_correct = 0
+electra_base_correct = 0
+combined_electra_correct = 0
+combined_both = 0
 
 total = 0
 threshold = 0.8
@@ -44,27 +41,21 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
 
         total += 1 #we will evalute this error
 
-        bert_suggestions = BERT(input_sentence, topk, threshold)
+        bert_suggestions = BERT(input_sentence, threshold)
         if correction[2] in bert_suggestions:
-
             bert_correct += 1
 
-        # electra1_suggestions, electra2_suggestions = ELECTRA(input_sentence, topk, threshold)
-        # if correction[2] in electra1_suggestions:
-        #     #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
-        #     electra1_correct += 1
-        #
-        # if correction[2] in electra2_suggestions:
-        #     #NEED TO ADD CHECKING FOR THE SAME TOKEN INDEX BEING SWAPPED (USE THE INDEX PARAMETER)
-        #     electra2_correct += 1
+        electra_base_suggestions = ELECTRA_BASE(input_sentence, threshold)
+        if correction[2] in electra_base_suggestions:
+            electra_base_correct += 1
 
-        # combined1_suggestions, combined2_suggestions = COMBINED(input_sentence, topk, threshold)
-        combined1_suggestions = COMBINED(input_sentence, topk, threshold)
-        if correction[2] in combined1_suggestions:
-            combined1_correct += 1
-        #
-        # if correction[2] in combined2_suggestions:
-        #     combined2_correct += 1
+        combined_electra_suggestions = COMBINED_ELECTRA(input_sentence, threshold)
+        if correction[2] in combined_electra_suggestions:
+            combined_electra_correct += 1
+
+        combined_both_suggestions = COMBINED_BOTH(input_sentence, threshold)
+        if correction[2] in combined_both_suggestions:
+            combined_both_correct += 1
 
         if total % 10 == 0:
             print("\nTotal Evaluated: ", total)
@@ -73,26 +64,20 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
             print("\t Correct: ", bert_correct)
             print("\t Accuracy: ", bert_correct/total)
 
-            # print('BERT2 results:')
-            # print("\t Correct: ", bert2_correct)
-            # print("\t Accuracy: ", bert2_correct/total)
-            #
-            # print('ELECTRA1 results:')
-            # print("\t Correct: ", electra1_correct)
-            # print("\t Accuracy: ", electra1_correct/total)
-            #
-            # print('ELECTRA2 results:')
-            # print("\t Correct: ", electra2_correct)
-            # print("\t Accuracy: ", electra2_correct/total)
+            print('Electra Base results:')
+            print("\t Correct: ", electra_base_correct)
+            print("\t Accuracy: ", electra_base_correct/total)
 
-            print('Combined1 results:')
-            print("\t Correct: ", combined1_correct)
-            print("\t Accuracy: ", combined1_correct/total)
+            print('Combined Electra results:')
+            print("\t Correct: ", combined_electra_correct)
+            print("\t Accuracy: ", combined_electra_correct/total)
 
-            # print('Combined2 results:')
-            # print("\t Correct: ", combined2_correct)
-            # print("\t Accuracy: ", combined2_correct/total)
+            print('Combined Both results:')
+            print("\t Correct: ", combined_both_correct)
+            print("\t Accuracy: ", combined_both_correct/total)
 
+
+    print("\nTotal Evaluated: ", total)
 
     print("\nTotal Evaluated: ", total)
 
@@ -100,22 +85,14 @@ with open('./input_data/input.txt', 'r') as preprocessed_file:
     print("\t Correct: ", bert_correct)
     print("\t Accuracy: ", bert_correct/total)
 
-    # print('BERT2 results:')
-    # print("\t Correct: ", bert2_correct)
-    # print("\t Accuracy: ", bert2_correct/total)
-    #
-    # print('ELECTRA1 results:')
-    # print("\t Correct: ", electra1_correct)
-    # print("\t Accuracy: ", electra1_correct/total)
-    #
-    # print('ELECTRA2 results:')
-    # print("\t Correct: ", electra2_correct)
-    # print("\t Accuracy: ", electra2_correct/total)
+    print('Electra Base results:')
+    print("\t Correct: ", electra_base_correct)
+    print("\t Accuracy: ", electra_base_correct/total)
 
-    print('Combined1 results:')
-    print("\t Correct: ", combined1_correct)
-    print("\t Accuracy: ", combined1_correct/total)
+    print('Combined Electra results:')
+    print("\t Correct: ", combined_electra_correct)
+    print("\t Accuracy: ", combined_electra_correct/total)
 
-    # print('Combined2 results:')
-    # print("\t Correct: ", combined2_correct)
-    # print("\t Accuracy: ", combined2_correct/total)
+    print('Combined Both results:')
+    print("\t Correct: ", combined_both_correct)
+    print("\t Accuracy: ", combined_both_correct/total)
