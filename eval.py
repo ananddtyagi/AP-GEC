@@ -4,14 +4,14 @@
 # from electra2 import predict as ELECTRA2
 from bert import predict as BERT
 from electra_base import predict as ELECTRA_BASE
-from combined_electra import predict as COMBINED_ELECTRA
+from electra_combined import predict as ELECTRA_COMBINED
 from combined_both import predict as COMBINED_BOTH
 
 from tqdm import trange
 
 bert_correct = 0
 electra_base_correct = 0
-combined_electra_correct = 0
+electra_combined_correct = 0
 combined_both = 0
 
 total = 0
@@ -49,9 +49,9 @@ with open('./input_data/test.txt', 'r') as preprocessed_file:
         if correction[2] in electra_base_suggestions:
             electra_base_correct += 1
 
-        combined_electra_suggestions = COMBINED_ELECTRA(input_sentence, threshold)
-        if correction[2] in combined_electra_suggestions:
-            combined_electra_correct += 1
+        electra_combined_suggestions = ELECTRA_COMBINED(input_sentence, threshold)
+        if correction[2] in electra_combined_suggestions:
+            electra_combined_correct += 1
 
         combined_both_suggestions = COMBINED_BOTH(input_sentence, threshold)
         if correction[2] in combined_both_suggestions:
@@ -69,8 +69,8 @@ with open('./input_data/test.txt', 'r') as preprocessed_file:
             print("\t Accuracy: ", electra_base_correct/total)
 
             print('Combined Electra results:')
-            print("\t Correct: ", combined_electra_correct)
-            print("\t Accuracy: ", combined_electra_correct/total)
+            print("\t Correct: ", electra_combined_correct)
+            print("\t Accuracy: ", electra_combined_correct/total)
 
             print('Combined Both results:')
             print("\t Correct: ", combined_both_correct)
@@ -90,8 +90,8 @@ with open('./input_data/test.txt', 'r') as preprocessed_file:
     print("\t Accuracy: ", electra_base_correct/total)
 
     print('Combined Electra results:')
-    print("\t Correct: ", combined_electra_correct)
-    print("\t Accuracy: ", combined_electra_correct/total)
+    print("\t Correct: ", electra_combined_correct)
+    print("\t Accuracy: ", electra_combined_correct/total)
 
     print('Combined Both results:')
     print("\t Correct: ", combined_both_correct)
