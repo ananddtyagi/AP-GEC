@@ -12,16 +12,13 @@ def fstr(sentence):
 def mask(sentence, masked_index):
     return sentence[:masked_index] + ['[MASK]'] + sentence[masked_index+1:]
 
-
-
 fill_mask = pipeline(
     "fill-mask",
-    model="google/electra-large-generator",
-    tokenizer="google/electra-large-generator"
+    model="google/electra-base-generator",
+    tokenizer="google/electra-base-generator"
 )
 
 tokenizer = ElectraTokenizer.from_pretrained('google/electra-base-generator')
-
 
 def are_syns(word1, word2):
     for synset in wordnet.synsets(word1):
