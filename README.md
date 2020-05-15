@@ -1,6 +1,6 @@
 # Introduction #
 
-This is the repository for the model mentioned in the paper "Using ELECTRA’s discriminator to improve the BERT-based GrammarError Correction pipeline"
+This is the repository for the model mentioned in the paper "Using ELECTRA’s discriminator to improve the BERT-basedGrammatical Error Correction pipeline"
 
 # Data #
 In order to replicate the results mentioned in the paper, first download the W\&I+LOCNESS Dataset from https://www.cl.cam.ac.uk/research/nl/bea2019st/data/wi+locness_v2.1.bea19.tar.gz .
