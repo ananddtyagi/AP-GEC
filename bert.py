@@ -43,6 +43,8 @@ def predict(sentence, threshold):
         # print(masked_sentence)
         # print(prediction)
         predicted_token = tokenizer.convert_ids_to_tokens(prediction['token'])
+        print(predicted_token, " ", prediction, " ", word)
+
         if predicted_token != word and not are_syns(predicted_token, word):
             if prediction['score'] > threshold:
                 bert.append({'index': i, 'token': predicted_token, 'confidence': prediction['score']})
@@ -50,3 +52,5 @@ def predict(sentence, threshold):
     sorted_bert = sorted(bert, key=itemgetter('confidence'), reverse=True)
 
     return [sug['token'] for sug in sorted_bert]
+
+print(predict('He sleeping at night.', 0))

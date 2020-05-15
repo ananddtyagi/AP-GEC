@@ -1,7 +1,3 @@
-# from bert1 import predict as BERT1
-# from bert2 import predict as BERT2
-# from electra1 import predict as ELECTRA1
-# from electra2 import predict as ELECTRA2
 from bert import predict as BERT
 from electra_base import predict as ELECTRA_BASE
 from electra_combined import predict as ELECTRA_COMBINED
@@ -12,14 +8,17 @@ from tqdm import trange
 bert_correct = 0
 electra_base_correct = 0
 electra_combined_correct = 0
-combined_both = 0
+combined_both_correct = 0
 
 total = 0
 threshold = 0.8
 
-with open('./input_data/test.txt', 'r') as preprocessed_file:
+START = 0
+
+with open('./input_data/input.txt', 'r') as preprocessed_file:
     lines = preprocessed_file.readlines()
-    i = 0
+    i = START*3
+
     while i < len(lines):
 
         input_sentence = lines[i][2:] #exclude the beggining S
@@ -40,25 +39,32 @@ with open('./input_data/test.txt', 'r') as preprocessed_file:
             continue
 
         total += 1 #we will evalute this error
+        print(correction[2])
 
         bert_suggestions = BERT(input_sentence, threshold)
         if correction[2] in bert_suggestions:
+            print("b: ", bert_suggestions)
             bert_correct += 1
 
         electra_base_suggestions = ELECTRA_BASE(input_sentence, threshold)
         if correction[2] in electra_base_suggestions:
+            print("eb: ",electra_base_suggestions)
+
             electra_base_correct += 1
 
         electra_combined_suggestions = ELECTRA_COMBINED(input_sentence, threshold)
         if correction[2] in electra_combined_suggestions:
+            print("ce: ",electra_combined_suggestions)
             electra_combined_correct += 1
 
         combined_both_suggestions = COMBINED_BOTH(input_sentence, threshold)
         if correction[2] in combined_both_suggestions:
+            print("cb: ",combined_both_suggestions)
             combined_both_correct += 1
 
         if total % 10 == 0:
-            print("\nTotal Evaluated: ", total)
+            print("\nStart = ", START)
+            print("Total Evaluated: ", total)
 
             print('BERT results:')
             print("\t Correct: ", bert_correct)
@@ -77,9 +83,8 @@ with open('./input_data/test.txt', 'r') as preprocessed_file:
             print("\t Accuracy: ", combined_both_correct/total)
 
 
-    print("\nTotal Evaluated: ", total)
-
-    print("\nTotal Evaluated: ", total)
+    print("\nStart = ", START)
+    print("Total Evaluated: ", total)
 
     print('BERT results:')
     print("\t Correct: ", bert_correct)
